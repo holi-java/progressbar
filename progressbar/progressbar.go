@@ -9,23 +9,23 @@ type ProgressBar interface {
 	Set(done uint)
 }
 
-type normalBar struct {
+type simple struct {
 	done uint32
 }
 
-func (self *normalBar) Total() uint {
+func (self *simple) Total() uint {
 	return 100
 }
 
-func (self *normalBar) Done() uint {
+func (self *simple) Done() uint {
 	return uint(LoadUint32(&self.done))
 }
 
-func (self *normalBar) Progress() float32 {
+func (self *simple) Progress() float32 {
 	return float32(self.Done()) / float32(self.Total())
 }
 
-func (self *normalBar) Set(done uint) {
+func (self *simple) Set(done uint) {
 	for {
 		current := self.Done()
 		if current >= done {
@@ -46,5 +46,5 @@ func min(a, b uint) uint {
 }
 
 func New() ProgressBar {
-	return &normalBar{}
+	return &simple{}
 }
