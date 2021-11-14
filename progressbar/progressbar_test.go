@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestStartingValues(t *testing.T) {
+func TestInitialValues(t *testing.T) {
 	bar := progressbar.New()
 
 	assert.Equal(t, uint(100), bar.Total())
@@ -25,7 +25,7 @@ func TestSetDone(t *testing.T) {
 	assert.Equal(t, float32(0.2), bar.Progress())
 }
 
-func TestSetBackwardDoneSkipped(t *testing.T) {
+func TestSetBackwardDoneWillBeSkipped(t *testing.T) {
 	bar := progressbar.New()
 
 	bar.Set(20)
@@ -36,7 +36,7 @@ func TestSetBackwardDoneSkipped(t *testing.T) {
 	assert.Equal(t, float32(0.2), bar.Progress())
 }
 
-func TestSetDoneOutOfTotalRange(t *testing.T) {
+func TestSetDoneOutOfTotalRangeWillMarkAsCompleted(t *testing.T) {
 	bar := progressbar.New()
 
 	bar.Set(200)
@@ -46,7 +46,7 @@ func TestSetDoneOutOfTotalRange(t *testing.T) {
 	assert.Equal(t, float32(1), bar.Progress())
 }
 
-func TestPercentagePresentation(t *testing.T) {
+func TestPercentageOfProgressPresentation(t *testing.T) {
 	bar := progressbar.New()
 	assert.MatchRegex(t, bar.(fmt.Stringer).String(), `  0%$`)
 
