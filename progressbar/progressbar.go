@@ -1,5 +1,7 @@
 package progressbar
 
+import . "sync/atomic"
+
 type ProgressBar interface {
 	Total() uint
 	Done() uint
@@ -8,7 +10,7 @@ type ProgressBar interface {
 }
 
 type normalBar struct {
-	done uint
+	done uint32
 }
 
 func (self *normalBar) Total() uint {
@@ -16,7 +18,7 @@ func (self *normalBar) Total() uint {
 }
 
 func (self *normalBar) Done() uint {
-	return self.done
+	return uint(LoadUint32(&self.done))
 }
 
 func (self *normalBar) Progress() float32 {
@@ -24,7 +26,16 @@ func (self *normalBar) Progress() float32 {
 }
 
 func (self *normalBar) Set(done uint) {
-	self.done = min(done, self.Total())
+	for {
+		current := self.Done()
+		if current >= done {
+			return
+		}
+		if CompareAndSwapUint32(&self.done, uint32(current), uint32(min(done, self.Total()))) {
+			return
+		}
+		//spin
+	}
 }
 
 func min(a, b uint) uint {

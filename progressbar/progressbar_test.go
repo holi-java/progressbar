@@ -25,6 +25,17 @@ func TestSetDone(t *testing.T) {
 	assert.Equal(t, float32(0.2), bar.Progress())
 }
 
+func TestSetBackwardDoneSkipped(t *testing.T) {
+	bar := progressbar.New()
+
+	bar.Set(20)
+
+	bar.Set(10)
+	assert.Equal(t, uint(100), bar.Total())
+	assert.Equal(t, uint(20), bar.Done())
+	assert.Equal(t, float32(0.2), bar.Progress())
+}
+
 func TestSetDoneOutOfTotalRange(t *testing.T) {
 	bar := progressbar.New()
 
