@@ -3,12 +3,12 @@ package progressbar_test
 import (
 	"fmt"
 	"github.com/go-playground/assert/v2"
-	"progressbar/progressbar"
+	. "progressbar/progressbar"
 	"testing"
 )
 
 func TestInitialValues(t *testing.T) {
-	bar := progressbar.New()
+	bar := New(BAR)
 
 	assert.Equal(t, uint(100), bar.Total())
 	assert.Equal(t, uint(0), bar.Done())
@@ -16,7 +16,7 @@ func TestInitialValues(t *testing.T) {
 }
 
 func TestSetDone(t *testing.T) {
-	bar := progressbar.New()
+	bar := New(BAR)
 
 	bar.Set(20)
 
@@ -26,7 +26,7 @@ func TestSetDone(t *testing.T) {
 }
 
 func TestSetBackwardDoneWillBeSkipped(t *testing.T) {
-	bar := progressbar.New()
+	bar := New(BAR)
 
 	bar.Set(20)
 
@@ -37,7 +37,7 @@ func TestSetBackwardDoneWillBeSkipped(t *testing.T) {
 }
 
 func TestSetDoneOutOfTotalRangeWillMarkAsCompleted(t *testing.T) {
-	bar := progressbar.New()
+	bar := New(BAR)
 
 	bar.Set(200)
 
@@ -47,7 +47,7 @@ func TestSetDoneOutOfTotalRangeWillMarkAsCompleted(t *testing.T) {
 }
 
 func TestPercentageOfProgressPresentation(t *testing.T) {
-	bar := progressbar.New()
+	bar := New(BAR)
 	assert.MatchRegex(t, bar.(fmt.Stringer).String(), `  0%$`)
 
 	bar.Set(1)
@@ -58,7 +58,7 @@ func TestPercentageOfProgressPresentation(t *testing.T) {
 }
 
 func TestBarPresentation(t *testing.T) {
-	bar := progressbar.New()
+	bar := New(BAR)
 	assert.MatchRegex(t, bar.(fmt.Stringer).String(), `\[                    \]`)
 
 	bar.Set(1)
@@ -66,4 +66,11 @@ func TestBarPresentation(t *testing.T) {
 
 	bar.Set(10)
 	assert.MatchRegex(t, bar.(fmt.Stringer).String(), `\[██                  \]`)
+}
+
+func TestCustomBarPresentation(t *testing.T) {
+	bar := New(NUM)
+
+	bar.Set(10)
+	assert.MatchRegex(t, bar.(fmt.Stringer).String(), `\[##                  \]`)
 }

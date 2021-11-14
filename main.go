@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	bar := progressbar.New()
+	bar := progressbar.New(progressbar.BAR)
 	for i := bar.Done(); i <= bar.Total(); i++ {
 		bar.Set(i)
 		fmt.Print(bar)

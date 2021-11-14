@@ -11,6 +11,7 @@ type ProgressBar interface {
 
 type simple struct {
 	done uint32
+	bar  rune
 }
 
 func (self *simple) Total() uint {
@@ -45,6 +46,6 @@ func min(a, b uint) uint {
 	return b
 }
 
-func New() ProgressBar {
-	return &simple{}
+func New(bar rune) ProgressBar {
+	return &simple{bar: bar}
 }
